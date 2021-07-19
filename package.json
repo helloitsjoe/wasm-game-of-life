@@ -1,0 +1,8 @@
+{
+  "name": "wasm experiments",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --mode production",
+    "start": "webpack serve"
+  }
+}
