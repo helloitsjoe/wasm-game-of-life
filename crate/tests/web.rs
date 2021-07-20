@@ -51,3 +51,18 @@ fn count_neighbors_edge() {
   u.set_live(3, 3);
   assert_eq!(u.live_neighbor_count(4, 4), 3);
 }
+
+#[wasm_bindgen_test]
+fn get_next_generation() {
+  let mut u = Universe::new(5, 5);
+  u.set_live(1, 2);
+  u.set_live(2, 2);
+  u.set_live(3, 2);
+  u.tick();
+  assert_eq!(u.get_live(2, 1), Cell::Alive);
+  assert_eq!(u.get_live(2, 2), Cell::Alive);
+  assert_eq!(u.get_live(2, 3), Cell::Alive);
+
+  assert_eq!(u.get_live(1, 2), Cell::Dead);
+  assert_eq!(u.get_live(3, 2), Cell::Dead);
+}

@@ -25,16 +25,16 @@ pub enum Cell {
 
 pub struct Universe {
     width: u32,
-    _height: u32,
+    height: u32,
     cells: Vec<Cell>,
 }
 
 impl Universe {
-    pub fn new(width: u32, _height: u32) -> Universe {
+    pub fn new(width: u32, height: u32) -> Universe {
         Universe {
             width,
-            _height,
-            cells: vec![Cell::Dead; (width * _height) as usize],
+            height,
+            cells: vec![Cell::Dead; (width * height) as usize],
         }
     }
 
@@ -59,13 +59,10 @@ impl Universe {
         }
     }
 
-
     pub fn live_neighbor_count(&self, col: u32, row: u32) -> u8 {
         let home_idx = self.get_index(col, row) as i32;
         let mut count = 0;
         let width = self.width as i32;
-
-        // log(&format!("{:?}", self.cells));
 
         // Naive solution, see https://rustwasm.github.io/docs/book/game-of-life/implementing.html
         // for a better solution
@@ -87,5 +84,27 @@ impl Universe {
         }
 
         count
+    }
+
+    fn get_next_gen(&self) -> Vec<Cell> {
+        let mut cells = self.cells.clone();
+
+        // log(&format!("Before {:?}", cells));
+
+        for col in 0..self.width {
+            for row in 0..self.height {
+                let idx = self.get_index(col, row);
+                cells[idx] = match self.live_neighbor_count(col, row) {
+                   2 => cells[idx],
+                   3 => Cell::Alive,
+                   _ => Cell::Dead,
+                }
+            }
+        }
+        cells
+    }
+
+    pub fn tick(&mut self) {
+        self.cells = self.get_next_gen();
     }
 }
