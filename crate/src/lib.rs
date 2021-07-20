@@ -53,27 +53,31 @@ impl Universe {
 
     fn check_index(&self, idx: i32) -> bool {
         if idx < 0 {
-            return false
+            false
+        } else {
+            self.cells.get(idx as usize) == Some(&Cell::Alive)
         }
-        self.cells.get(idx as usize) == Some(&Cell::Alive)
     }
 
 
-    pub fn live_neighbor_count(&self, col: u32, row: u32) -> u32 {
+    pub fn live_neighbor_count(&self, col: u32, row: u32) -> u8 {
         let home_idx = self.get_index(col, row) as i32;
-        let mut count: u32 = 0;
+        let mut count = 0;
+        let width = self.width as i32;
 
         // log(&format!("{:?}", self.cells));
 
+        // Naive solution, see https://rustwasm.github.io/docs/book/game-of-life/implementing.html
+        // for a better solution
         let neighbors = vec![
             home_idx - 1,
             home_idx + 1,
-            home_idx + self.width as i32,
-            home_idx - self.width as i32,
-            home_idx - 1 - (self.width) as i32,
-            home_idx + 1 - (self.width) as i32,
-            home_idx - 1 + (self.width) as i32,
-            home_idx + 1 + (self.width) as i32,
+            home_idx + width,
+            home_idx - width,
+            home_idx - 1 - width,
+            home_idx + 1 - width,
+            home_idx - 1 + width,
+            home_idx + 1 + width,
         ];
 
         for idx in neighbors {
