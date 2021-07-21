@@ -11,13 +11,13 @@ use wasm_game_of_life::{Universe, Cell};
 const WIDTH: u32 = 5;
 const HEIGHT: u32 = 5;
 
-fn make_cells(width: u32, height: u32) -> Option<Vec<Cell>> {
-    Some(vec![Cell::Dead; (width * height) as usize])
-}
+// fn make_cells(width: u32, height: u32) -> Option<Vec<Cell>> {
+//     Some(vec![Cell::Dead; (width * height) as usize])
+// }
 
 #[wasm_bindgen_test]
 fn set_live() {
-  let mut u = Universe::new(WIDTH, HEIGHT, make_cells(WIDTH, HEIGHT));
+  let mut u = Universe::new(WIDTH, HEIGHT, Some(true));
   assert_eq!(u.get_live(0, 0), Cell::Dead);
   u.set_live(0, 0);
   assert_eq!(u.get_live(0, 0), Cell::Alive);
@@ -25,7 +25,7 @@ fn set_live() {
 
 #[wasm_bindgen_test]
 fn count_neighbors() {
-  let mut u = Universe::new(WIDTH, HEIGHT, make_cells(WIDTH, HEIGHT));
+  let mut u = Universe::new(WIDTH, HEIGHT, Some(true));
   u.set_live(2, 2);
   u.set_live(3, 2);
   assert_eq!(u.live_neighbor_count(2, 2), 1);
@@ -43,7 +43,7 @@ fn count_neighbors() {
 
 #[wasm_bindgen_test]
 fn count_neighbors_edge() {
-  let mut u = Universe::new(WIDTH, HEIGHT, make_cells(WIDTH, HEIGHT));
+  let mut u = Universe::new(WIDTH, HEIGHT, Some(true));
   assert_eq!(u.live_neighbor_count(0, 0), 0);
   u.set_live(1, 0);
   u.set_live(0, 1);
@@ -60,7 +60,7 @@ fn count_neighbors_edge() {
 
 #[wasm_bindgen_test]
 fn get_next_generation() {
-  let mut u = Universe::new(WIDTH, HEIGHT, make_cells(WIDTH, HEIGHT));
+  let mut u = Universe::new(WIDTH, HEIGHT, Some(true));
   u.set_live(1, 2);
   u.set_live(2, 2);
   u.set_live(3, 2);
@@ -71,4 +71,19 @@ fn get_next_generation() {
 
   assert_eq!(u.get_live(1, 2), Cell::Dead);
   assert_eq!(u.get_live(3, 2), Cell::Dead);
+}
+
+#[wasm_bindgen_test]
+fn render() {
+  let mut u = Universe::new(WIDTH, HEIGHT, Some(true));
+  u.set_live(1, 2);
+  u.set_live(2, 2);
+  u.set_live(3, 2);
+  assert_eq!(u.render(),
+"◻◻◻◻◻
+◻◻◻◻◻
+◻◼◼◼◻
+◻◻◻◻◻
+◻◻◻◻◻
+")
 }

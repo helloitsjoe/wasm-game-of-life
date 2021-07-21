@@ -1,6 +1,9 @@
 mod utils;
 
+extern crate console_error_panic_hook;
+
 use std::fmt;
+use std::panic;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -24,6 +27,7 @@ pub enum Cell {
     Alive= 1,
 }
 
+#[wasm_bindgen]
 pub struct Universe {
     width: u32,
     height: u32,
@@ -44,10 +48,17 @@ impl fmt::Display for Universe {
     }
 }
 
+#[wasm_bindgen]
 impl Universe {
-    pub fn new(width: u32, height: u32, cells: Option<Vec<Cell>>) -> Universe {
-        let default_cells = (0..width * height).map(|i| {
-            if i % 2 == 0 || i % 7 == 0 {
+    // I would rather pass in `cells` but not sure how to handle wasm_bindgen error
+    // pub fn new(width: u32, height: u32, cells: Option<Vec<Cell>>) -> Universe {
+    pub fn new(width: u32, height: u32, empty_cells: Option<bool>) -> Universe {
+        console_error_panic_hook::set_once();
+
+        let cells = (0..width * height).map(|i| {
+            if empty_cells.unwrap_or(false) {
+                Cell::Dead
+            } else if i % 2 == 0 || i % 7 == 0 {
                 Cell::Alive
             } else {
                 Cell::Dead
@@ -57,7 +68,7 @@ impl Universe {
         Universe {
             width,
             height,
-            cells: cells.unwrap_or(default_cells),
+            cells,
         }
     }
 
