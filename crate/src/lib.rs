@@ -2,8 +2,8 @@ mod utils;
 
 extern crate console_error_panic_hook;
 
+// use std::panic;
 use std::fmt;
-use std::panic;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -72,6 +72,18 @@ impl Universe {
         }
     }
 
+    pub fn width(&self) -> u32 {
+        self.width
+    }
+
+    pub fn height(&self) -> u32 {
+        self.height
+    }
+
+    pub fn cells(&self) -> *const Cell {
+        self.cells.as_ptr()
+    }
+
     pub fn render(&self) -> String {
         self.to_string()
     }
@@ -87,14 +99,6 @@ impl Universe {
 
     fn get_index(&self, col: u32, row: u32) -> usize {
         (row * self.width + col) as usize
-    }
-
-    fn check_index(&self, idx: i32) -> bool {
-        if idx < 0 {
-            false
-        } else {
-            self.cells.get(idx as usize) == Some(&Cell::Alive)
-        }
     }
 
     pub fn live_neighbor_count(&self, col: u32, row: u32) -> u8 {
@@ -116,7 +120,7 @@ impl Universe {
         ];
 
         for idx in neighbors {
-            if self.check_index(idx) {
+            if idx > 0 && self.cells.get(idx as usize) == Some(&Cell::Alive) {
                 count += 1;
             }
         }
