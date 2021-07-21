@@ -61,6 +61,10 @@ impl Universe {
         }
     }
 
+    pub fn render(&self) -> String {
+        self.to_string()
+    }
+
     pub fn set_live(&mut self, col: u32, row: u32) {
         let idx =self.get_index(col, row);
         self.cells[idx] = Cell::Alive;
