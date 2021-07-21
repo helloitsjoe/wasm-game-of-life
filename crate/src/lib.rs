@@ -1,5 +1,6 @@
 mod utils;
 
+use std::fmt;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -29,12 +30,34 @@ pub struct Universe {
     cells: Vec<Cell>,
 }
 
+impl fmt::Display for Universe {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for line in self.cells.as_slice().chunks(self.width as usize) {
+            for &cell in line {
+                let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
+                write!(f, "{}", symbol)?;
+            }
+            write!(f, "\n")?;
+        }
+
+        Ok(())
+    }
+}
+
 impl Universe {
-    pub fn new(width: u32, height: u32) -> Universe {
+    pub fn new(width: u32, height: u32, cells: Option<Vec<Cell>>) -> Universe {
+        let default_cells = (0..width * height).map(|i| {
+            if i % 2 == 0 || i % 7 == 0 {
+                Cell::Alive
+            } else {
+                Cell::Dead
+            }
+        }).collect();
+
         Universe {
             width,
             height,
-            cells: vec![Cell::Dead; (width * height) as usize],
+            cells: cells.unwrap_or(default_cells),
         }
     }
 
@@ -94,6 +117,11 @@ impl Universe {
         for col in 0..self.width {
             for row in 0..self.height {
                 let idx = self.get_index(col, row);
+                // Rules of Tim Conway's Game of Life:
+                // 1. Any live cell with fewer than two live neighbours dies.
+                // 2. Any live cell with two or three live neighbours lives.
+                // 3. Any dead cell with exactly three live neighbours becomes a live cell.
+                // 4. Any live cell with more than three live neighbours dies.
                 cells[idx] = match self.live_neighbor_count(col, row) {
                    2 => cells[idx],
                    3 => Cell::Alive,
