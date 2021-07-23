@@ -4,7 +4,7 @@ import { Universe, Cell } from './crate/pkg/wasm-game-of-life';
 import { memory } from './crate/pkg/wasm-game-of-life_bg.wasm';
 
 const CELL_SIZE = 2;
-const GRID_COLOR = '#CCC';
+// const GRID_COLOR = '#CCC';
 const DEAD_COLOR = '#FFF';
 const ALIVE_COLOR = '#000';
 const WIDTH = 150;
@@ -20,24 +20,24 @@ const universe = Universe.new(WIDTH, HEIGHT);
 
 const getIdx = (col, row) => row * WIDTH + col;
 
-const drawGrid = ctx => {
-  ctx.beginPath();
-  ctx.strokeStyle = GRID_COLOR;
+// const drawGrid = ctx => {
+//   ctx.beginPath();
+//   ctx.strokeStyle = GRID_COLOR;
 
-  // Verticals
-  for (let i = 0; i < WIDTH; i++) {
-    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
-    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * HEIGHT + 1);
-  }
+//   // Verticals
+//   for (let i = 0; i < WIDTH; i++) {
+//     ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
+//     ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * HEIGHT + 1);
+//   }
 
-  // Horizontals
-  for (let j = 0; j < HEIGHT; j++) {
-    ctx.moveTo(0, j * (CELL_SIZE + 1) + 1);
-    ctx.lineTo((CELL_SIZE + 1) * WIDTH + 1, j * (CELL_SIZE + 1) + 1);
-  }
+//   // Horizontals
+//   for (let j = 0; j < HEIGHT; j++) {
+//     ctx.moveTo(0, j * (CELL_SIZE + 1) + 1);
+//     ctx.lineTo((CELL_SIZE + 1) * WIDTH + 1, j * (CELL_SIZE + 1) + 1);
+//   }
 
-  ctx.stroke();
-};
+//   ctx.stroke();
+// };
 
 const drawCells = ctx => {
   // Access `cells` from rust in memory directly. Neat!
