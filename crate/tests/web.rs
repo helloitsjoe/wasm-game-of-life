@@ -7,7 +7,7 @@ extern crate wasm_bindgen_test;
 use wasm_bindgen_test::*;
 use wasm_game_of_life::{Universe, Cell};
 
-// wasm_bindgen_test_configure!(run_in_browser);
+wasm_bindgen_test_configure!(run_in_browser);
 const WIDTH: u32 = 5;
 const HEIGHT: u32 = 5;
 
