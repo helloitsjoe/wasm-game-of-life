@@ -13,7 +13,7 @@ jobs:
           node-version: 14
       - uses: c-hive/gha-yarn-cache@v1
       - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - run: wasm-pack test --headless --chrome
+      - run: wasm-pack test --headless --chrome crate
 
       - run: yarn
       - run: yarn build
