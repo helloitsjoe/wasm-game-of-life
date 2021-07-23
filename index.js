@@ -40,6 +40,7 @@ const drawGrid = ctx => {
 };
 
 const drawCells = ctx => {
+  // Access `cells` from rust in memory directly. Neat!
   const cellsPtr = universe.cells();
   const cells = new Uint8Array(memory.buffer, cellsPtr, WIDTH * HEIGHT);
 
