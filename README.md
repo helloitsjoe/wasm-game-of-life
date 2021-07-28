@@ -3,18 +3,23 @@
 Tim Conway's Game of Life in Rust/wasm, following
 [this tutorial](https://rustwasm.github.io/docs/book/game-of-life/introduction.html).
 
-See it live at helloitsjoe.github.io/wasm-game-of-life
+See it live at
+[helloitsjoe.github.io/wasm-game-of-life](https://helloitsjoe.github.io/wasm-game-of-life)
 
-- Rust code is in `/crate/src`.
-- Rust/wasm tests are in `/crate/tests`.
-- JS glue code is in `/crate/pkg`
-- JS is in `index.js`
+- Rust code is in
+  [`/crate/src`](https://github.com/helloitsjoe/wasm-game-of-life/tree/main/crate/src)
+- Rust/wasm tests are in
+  [`/crate/tests`](https://github.com/helloitsjoe/wasm-game-of-life/tree/main/crate/tests)
+- JS glue code is in
+  [`/crate/pkg`](https://github.com/helloitsjoe/wasm-game-of-life/tree/main/crate/pkg)
+- JS is in
+  [`index.js`](https://github.com/helloitsjoe/wasm-game-of-life/tree/main/index.js)
 
 ---
 
 <div align="center">
 
-  <h1><code>wasm-pack-template</code></h1>
+  <h2><code>wasm-pack-template</code></h2>
 
 <strong>A template for kick starting a Rust and WebAssembly project using
 <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</strong>
