@@ -23,8 +23,8 @@ extern "C" {
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Cell {
-    Dead= 0,
-    Alive= 1,
+    Dead = 0,
+    Alive = 1,
 }
 
 #[wasm_bindgen]
@@ -50,20 +50,22 @@ impl fmt::Display for Universe {
 
 #[wasm_bindgen]
 impl Universe {
-    // I would rather pass in `cells` but not sure how to handle wasm_bindgen error
+    // I would rather pass in `cells` but have to figure out wasm_bindgen error
     // pub fn new(width: u32, height: u32, cells: Option<Vec<Cell>>) -> Universe {
     pub fn new(width: u32, height: u32, empty_cells: Option<bool>) -> Universe {
         console_error_panic_hook::set_once();
 
-        let cells = (0..width * height).map(|i| {
-            if empty_cells.unwrap_or(false) {
-                Cell::Dead
-            } else if i % 2 == 0 || i % 7 == 0 {
-                Cell::Alive
-            } else {
-                Cell::Dead
-            }
-        }).collect();
+        let cells = (0..width * height)
+            .map(|i| {
+                if empty_cells.unwrap_or(false) {
+                    Cell::Dead
+                } else if i % 2 == 0 || i % 7 == 0 {
+                    Cell::Alive
+                } else {
+                    Cell::Dead
+                }
+            })
+            .collect();
 
         Universe {
             width,
@@ -89,7 +91,7 @@ impl Universe {
     }
 
     pub fn set_live(&mut self, col: u32, row: u32) {
-        let idx =self.get_index(col, row);
+        let idx = self.get_index(col, row);
         self.cells[idx] = Cell::Alive;
     }
 
@@ -142,9 +144,9 @@ impl Universe {
                 // 3. Any dead cell with exactly three live neighbours becomes a live cell.
                 // 4. Any live cell with more than three live neighbours dies.
                 cells[idx] = match self.live_neighbor_count(col, row) {
-                   2 => cells[idx],
-                   3 => Cell::Alive,
-                   _ => Cell::Dead,
+                    2 => cells[idx],
+                    3 => Cell::Alive,
+                    _ => Cell::Dead,
                 }
             }
         }

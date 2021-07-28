@@ -1,0 +1,16 @@
+{
+  "name": "wasm-game-of-life",
+  "collaborators": [
+    "helloitsjoe <jboyle617@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "wasm-game-of-life_bg.wasm",
+    "wasm-game-of-life.js",
+    "wasm-game-of-life_bg.js",
+    "wasm-game-of-life.d.ts"
+  ],
+  "module": "wasm-game-of-life.js",
+  "types": "wasm-game-of-life.d.ts",
+  "sideEffects": false
+}

@@ -1,75 +1,56 @@
-// wasm import only works without dynamic import because of
-// experiments.asyncWebAssembly in webpack.config
 import { Universe, Cell } from './crate/pkg/wasm-game-of-life';
 import { memory } from './crate/pkg/wasm-game-of-life_bg.wasm';
 
 const CELL_SIZE = 2;
-// const GRID_COLOR = '#CCC';
+const GRID_SIZE = 150;
 const DEAD_COLOR = '#FFF';
 const ALIVE_COLOR = '#000';
-const WIDTH = 150;
-const HEIGHT = 150;
+
+const width = GRID_SIZE;
+const height = GRID_SIZE;
 
 const canvas = document.getElementById('canvas');
-canvas.width = (CELL_SIZE + 1) * WIDTH + 1;
-canvas.height = (CELL_SIZE + 1) * HEIGHT + 1;
+const ctx = canvas.getContext('2d', { alpha: false });
 
-const ctx = canvas.getContext('2d');
+canvas.width = (CELL_SIZE + 1) * width + 1;
+canvas.height = (CELL_SIZE + 1) * height + 1;
 
-const universe = Universe.new(WIDTH, HEIGHT);
+const universe = Universe.new(width, height);
 
-const getIdx = (col, row) => row * WIDTH + col;
-
-// const drawGrid = ctx => {
-//   ctx.beginPath();
-//   ctx.strokeStyle = GRID_COLOR;
-
-//   // Verticals
-//   for (let i = 0; i < WIDTH; i++) {
-//     ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
-//     ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * HEIGHT + 1);
-//   }
-
-//   // Horizontals
-//   for (let j = 0; j < HEIGHT; j++) {
-//     ctx.moveTo(0, j * (CELL_SIZE + 1) + 1);
-//     ctx.lineTo((CELL_SIZE + 1) * WIDTH + 1, j * (CELL_SIZE + 1) + 1);
-//   }
-
-//   ctx.stroke();
-// };
+const getIdx = (col, row) => row * width + col;
 
 const drawCells = ctx => {
   // Access `cells` from rust in memory directly. Neat!
   const cellsPtr = universe.cells();
-  const cells = new Uint8Array(memory.buffer, cellsPtr, WIDTH * HEIGHT);
+  const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
 
-  ctx.beginPath();
+  ctx.fillStyle = DEAD_COLOR;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let row = 0; row < HEIGHT; row++) {
-    for (let col = 0; col < WIDTH; col++) {
+  ctx.fillStyle = ALIVE_COLOR;
+
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
       const i = getIdx(col, row);
 
-      ctx.fillStyle = cells[i] === Cell.Dead ? DEAD_COLOR : ALIVE_COLOR;
-      ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
-        CELL_SIZE,
-        CELL_SIZE
-      );
+      if (cells[i] === Cell.Alive) {
+        ctx.fillRect(
+          col * (CELL_SIZE + 1) + 1,
+          row * (CELL_SIZE + 1) + 1,
+          CELL_SIZE,
+          CELL_SIZE
+        );
+      }
     }
   }
-
-  ctx.stroke();
 };
 
 const render = () => {
   universe.tick();
 
-  // drawGrid(ctx);
   drawCells(ctx);
 
   requestAnimationFrame(render);
 };
 
-render();
+requestAnimationFrame(render);
